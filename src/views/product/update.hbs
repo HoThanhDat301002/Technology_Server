@@ -1,0 +1,107 @@
+<body>
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Update product</h4>
+                <p class="card-description">
+                    Update a new product to the store
+                </p>
+                <form class="forms-sample" method="POST" action="/product/{{product._id}}/edit" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="exampleInputName1">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{product.name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Price</label>
+                        <input type="text" class="form-control" id="price" name="price" value="{{product.price}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Image File</label>
+                        <div class="input-group col-xs-12 parent-div">
+                            <div id="upload" class="upload">
+                                <input required type="file" multiple onchange="" accept="image/*" name="images"
+                                    id="files">
+                            </div>
+                            <button class=" btn-upload">Upload</button>
+                        </div>
+                        {{#each product.image}}
+                        <tr class="odd gradeX">
+                            <td> <img style=" object-fit: cover; opacity: 0.5; margin-right:5px; margin-top:15px" src="{{this}}" width="150" height="210"/></td>
+                        </tr>
+                           {{/each}}
+                        <output></output>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleTextarea1">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5">{{product.description}}</textarea>
+                    </div>
+                     <div class="form-group">
+                        <label>Released</label>
+                        <input class="form-control"  type="date" name="released"  id="released"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Category </label>
+                        <select class="form-control" name="category_id">
+                             {{#each categories}}
+                                        {{#if this.selectedId}}
+                                        <option selected value={{this._id}}>{{this.name}}</option>
+                                         {{else}}
+                                           <option value={{this._id}}>{{this.name}}</option>
+                                        {{/if}}
+                                        {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status">
+                        <option value={{product.status}}>{{product.status}}</option>
+                        {{#eq product.status true}}
+                        <option value="false">false</option>
+                        {{/eq}}
+                        {{#eq product.status false}}
+                        <option value="true">true</option>
+                        {{/eq}}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const validation = () => {
+        const name = document.getElementById('name').value;
+        const released = document.getElementById('released').value;
+        const submit = document.getElementById('submit');
+        if (!name || name.trim().length == 0) {
+            submit.disabled = true;
+        } else {
+            submit.disabled = false;
+        }
+    }
+    document.querySelector("#files").addEventListener("change", (e) => {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            const files = e.target.files;
+            const output = document.querySelector("output");
+            output.innerHTML = "";
+            for (let i = 0; i < files.length; i++) {
+                if (!files[i].type.match("image")) continue;
+                const imgReader = new FileReader();
+                imgReader.addEventListener("load", function (event) {
+                    const imgFile = event.target;
+                    const img = document.createElement("img");
+                    img.className = "thumbnail"
+                    img.src = imgFile.result
+                    output.appendChild(img);
+                });
+                imgReader.readAsDataURL(files[i]);
+            }
+        } else {
+            alert("Your browser does not support File API");
+        }
+    });
+
+
+</script>

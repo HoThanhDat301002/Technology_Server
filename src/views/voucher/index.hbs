@@ -1,0 +1,101 @@
+<body>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Voucher Management</h4>
+                <p class="card-description">
+                     <a type="button" class="btn btn-inverse-success btn-fw" href="/voucher/insert">Add Voucher</a>
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-hover ">
+                        <thead>
+                            <tr>
+                                <th>Index</th>
+                                <th>Title</th>
+                                <th>Image</th>
+                                <th>Body</th>
+                                <th>Discount</th>
+                                <th>Released</th>
+                                <th>End Date</th>                     
+                                <th>Code</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                  <tbody>
+                            {{#each voucher}}
+                            <tr class="odd gradeX">
+                                <td>{{this.index}}</td>
+                                <td>{{this.title}}</td>
+                                <td> <img id="imageNews" src="{{this.image}}"> </td>
+                                <td>{{this.body}}</td>
+                                <td>{{this.discount}}</td>                         
+                                <td>{{this.released}}</td>
+                                <td>{{this.end_date}}</td>
+                                <td>{{this.code}}</td>
+                                <td>
+                                    <button onclick="edit('{{this._id}}')" type="button"
+                    class="btn btn-success btn-icon-text btn-sm" style="letter-spacing: 1;white-space: nowrap"
+                    text-align="center">
+                    <i class="ti-file btn-icon-append"></i>
+                    Edit
+                  </button>
+                  <button onclick="goDelete('{{this._id}}')" data-toggle="modal" data-target="#confirmModal"
+                    type="button" class="btn btn-danger btn-icon-text btn-sm"
+                    style="letter-spacing: 1;white-space: nowrap; margin-top:20px">
+                    <i class="ti-alert btn-icon-prepend"></i>
+                    Delete
+                  </button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="panel-body">
+            <h3>Are you sure?</h3>
+            <div class="form-group modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" onclick="onDelete()" class="btn btn-primary">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  const edit = (id) =>{
+        window.location.href = `voucher/${id}/edit`;
+  }
+   const goDelete = (id) => {
+      deleted_id = id;
+    }
+   const fetchAPI = async (url, option) => {
+        const res = await fetch(url, option);
+        return res.json();
+       
+    }
+    const onDelete = async () => {
+      const url = `http://localhost:3000/voucher/${deleted_id}/delete`;
+      const option = {
+        method: 'delete',
+        headers: { 'Content-Type': 'application/json' }
+      }
+      try {
+        await fetchAPI(url, option);
+        window.location.href = '/voucher';
+      } catch (e) {
+         console.log('Delete error: ', e);
+           window.location.href = '/voucher';
+          }
+    }
+</script>

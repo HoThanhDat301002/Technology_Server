@@ -1,0 +1,425 @@
+<body>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Order Management</h4>
+                <div class="template-demo">
+                    <button type="button" class="btn btn-dark" id="homeButton">All</button>
+                    <button type="button" class="btn btn-primary" id="waitingButton">Waiting</button>
+                    <button type="button" class="btn btn-secondary" id="processingButton">Processing</button>
+                    <button type="button" class="btn btn-info" id="deliveringButton">Delivering</button>
+                    <button type="button" class="btn btn-success" id="completeButton">Complete</button>
+                    <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
+                </div>
+                <div class="table-responsive">
+                    <div id="homeTable">
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+
+                                    <th>MoneyTotal</th>
+
+                                    <th>MoneyFinal</th>
+
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+                                        {{#eq this.status "WAITING"}}
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-warning">{{this.status}}</label>
+                                        {{/eq}}
+                                        {{#eq this.status "PROCESSING"}}
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-secondary">{{this.status}}</label>
+                                        {{/eq}}
+                                        {{#eq this.status "CANCEL"}}
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-danger">{{this.status}}</label>
+                                        {{/eq}}
+                                        {{#eq this.status "COMPLETE"}}
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-success">{{this.status}}</label>
+                                        {{/eq}}
+                                        {{#eq this.status "DELIVERING"}}
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-info">{{this.status}}</label>
+                                        {{/eq}}
+                                    </td>
+
+                                    <td>{{this.moneyTotal}}</td>
+                                    <td>{{this.moneyFinal}}</td>
+
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "CANCEL" }}
+                                      
+                                        {{else}}
+                                        {{#eq this.status "COMPLETE" }}
+                                  
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+
+
+
+                                        {{/eq}}
+
+
+
+
+
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <div id="processingTable" hidden>
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+                                    <th>MoneyTotal</th>
+                                    <th>MoneyFinal</th>
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                {{#eq this.status "PROCESSING"}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-secondary">{{this.status}}</label>
+                                    </td>
+                                    <td>{{this.moneyTotal}}</td>
+                                    <td>{{this.moneyFinal}}</td>
+
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "CANCEL"}}
+                                       
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+                                    </td>
+                                </tr>
+                                {{/eq}}
+                                {{/each}}
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <div id="deliveringTable" hidden>
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+                                    <th>MoneyTotal</th>
+                                    <th>MoneyFinal</th>
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                {{#eq this.status "DELIVERING"}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-info">{{this.status}}</label>
+
+                                    </td>
+                                    <td>{{this.moneyTotal}}</td>
+                                    <td>{{this.moneyFinal}}</td>
+
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "CANCEL"}}
+                                      
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+                                    </td>
+                                </tr>
+                                {{/eq}}
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="completeTable" hidden>
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+                                    <th>MoneyTotal</th>
+
+                                    <th>MoneyFinal</th>
+
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                {{#eq this.status "COMPLETE"}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-success">{{this.status}}</label>
+
+                                    </td>
+
+                                    <td>{{this.moneyTotal}}</td>
+
+                                    <td>{{this.moneyFinal}}</td>
+
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "COMPLETE"}}
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+                                    </td>
+                                </tr>
+                                {{/eq}}
+                                {{/each}}
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <div id="cancelTable" hidden>
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+                                    <th>MoneyTotal</th>
+                                    <th>MoneyFinal</th>
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                {{#eq this.status "CANCEL"}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-danger">{{this.status}}</label>
+
+                                    </td>
+                                    <td>{{this.moneyTotal}}</td>
+
+                                    <td>{{this.moneyFinal}}</td>
+
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "CANCEL"}}                                       
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+                                    </td>
+                                </tr>
+                                {{/eq}}
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                     <div id="waitingTable" hidden>
+                        <table class="table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Name</th>
+                                    <th>Payment Type</th>
+                                    <th>Status</th>
+                                    <th>MoneyTotal</th>
+                                    <th>MoneyFinal</th>
+                                    <th>Released</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each order}}
+                                {{#eq this.status "WAITING"}}
+                                <tr class="odd gradeX">
+                                    <td>{{this.index}}</td>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.paymentType}}</td>
+                                    <td>
+
+                                        <label style="color: white; font-weight: bold;"
+                                            class="badge badge-warning">{{this.status}}</label>
+
+                                    </td>
+                                    <td>{{this.moneyTotal}}</td>
+                                    <td>{{this.moneyFinal}}</td>
+                                    <td>{{this.released}}</td>
+                                    <td>
+                                        {{#eq this.status "CANCEL"}}                                       
+                                        {{else}}
+                                        <button type="button" onclick="edit('{{this._id}}')"
+                                            class="btn btn-success btn-icon-text btn-sm" text-align="center"
+                                            href="/order/">
+                                            Submit
+                                        </button>
+                                        {{/eq}}
+                                    </td>
+                                </tr>
+                                {{/eq}}
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    document.getElementById("homeButton").addEventListener(
+        "click",
+        () => {
+            document.getElementById("homeTable").hidden = false;
+            document.getElementById("processingTable").hidden = true;
+            document.getElementById("deliveringTable").hidden = true;
+            document.getElementById("completeTable").hidden = true;
+            document.getElementById("cancelTable").hidden = true;
+            document.getElementById("waitingTable").hidden = true;
+        },
+        false
+    );
+
+    document.getElementById("processingButton").addEventListener(
+        "click",
+        () => {
+            document.getElementById("processingTable").hidden = false;
+            document.getElementById("homeTable").hidden = true;
+            document.getElementById("deliveringTable").hidden = true;
+            document.getElementById("completeTable").hidden = true;
+            document.getElementById("cancelTable").hidden = true;
+            document.getElementById("waitingTable").hidden = true;
+        },
+        false
+    );
+    document.getElementById("deliveringButton").addEventListener(
+        "click",
+        () => {
+            document.getElementById("deliveringTable").hidden = false;
+            document.getElementById("processingTable").hidden = true;
+            document.getElementById("homeTable").hidden = true;
+            document.getElementById("completeTable").hidden = true;
+            document.getElementById("cancelTable").hidden = true;
+            document.getElementById("waitingTable").hidden = true;
+        },
+        false
+    );
+    document.getElementById("completeButton").addEventListener(
+        "click",
+        () => {
+            document.getElementById("completeTable").hidden = false;
+            document.getElementById("deliveringTable").hidden = true;
+            document.getElementById("processingTable").hidden = true;
+            document.getElementById("homeTable").hidden = true;
+            document.getElementById("cancelTable").hidden = true;
+            document.getElementById("waitingTable").hidden = true;
+        },
+        false
+    );
+    document.getElementById("cancelButton").addEventListener(
+        "click",
+        () => {
+            document.getElementById("cancelTable").hidden = false;
+            document.getElementById("deliveringTable").hidden = true;
+            document.getElementById("processingTable").hidden = true;
+            document.getElementById("homeTable").hidden = true;
+            document.getElementById("completeTable").hidden = true;
+            document.getElementById("waitingTable").hidden = true;
+        },
+        false
+    );
+     document.getElementById("waitingButton").addEventListener(
+        "click",
+        () => {
+             document.getElementById("waitingTable").hidden = false;
+            document.getElementById("cancelTable").hidden = true;
+            document.getElementById("deliveringTable").hidden = true;
+            document.getElementById("processingTable").hidden = true;
+            document.getElementById("homeTable").hidden = true;
+            document.getElementById("completeTable").hidden = true;
+           
+        },
+        false
+    );
+    const edit = (id) => {
+        window.location.href = `order/${id}/edit`;
+    }
+</script>
